@@ -13,6 +13,6 @@ namespace BDB_Backend.Models
 
         public DbSet<UserAccount> userAccounts { get; set; } = null!;
 
-        public DbSet<BDB_Backend.Models.ItemListing> ItemListing { get; set; } = default!;
+        public DbSet<ItemListing> ItemListing { get; set; } = default!;
     }
 }
