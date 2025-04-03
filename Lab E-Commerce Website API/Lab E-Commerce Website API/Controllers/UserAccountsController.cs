@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BDB_Backend.Models;
+using Lab_E_Commerce_Website_API.Models;
 using Microsoft.AspNetCore.Identity;
 
 // This handles most API requests to the server about User Accounts
 // so if the front end accesses https://<ip>:<port>/UserAccounts in different ways,
 // different things will happen (get, post, delete http requests)
-namespace BDB_Backend.Controllers
+namespace Lab_E_Commerce_Website_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
