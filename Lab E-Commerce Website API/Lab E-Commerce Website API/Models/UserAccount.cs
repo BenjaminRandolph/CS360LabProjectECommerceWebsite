@@ -1,4 +1,4 @@
-namespace BDB_Backend.Models
+namespace Lab_E_Commerce_Website_API.Models
 {
     // The model for user accounts
     // This is how we access user accounts in the database for account permissions and data
@@ -15,6 +15,8 @@ namespace BDB_Backend.Models
         public string? address { get; set; }
 
         public string? email { get; set; }
+
+        public int funds { get; set; }
 
         public bool adminPermissions { get; set; }
     }
