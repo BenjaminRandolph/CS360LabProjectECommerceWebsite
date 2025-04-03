@@ -3,6 +3,7 @@ import { Nav } from 'react-bootstrap';
 import { Routes, Route, Link } from 'react-router-dom'
 import Signup from './Signup'
 import Account from './Account'
+import Listings from './Listings'
 
 function App(){
 	return(
@@ -25,6 +26,11 @@ function App(){
 							<li className="nav-item">
 								<nav>
         						<Link to="/account" className='nav-link'>Account</Link>
+      							</nav>
+					  		</li>
+							<li className="nav-item">
+								<nav>
+        						<Link to="/listings" className='nav-link'>Listings</Link>
       							</nav>
 					  		</li>
 						</ul>
@@ -52,6 +58,7 @@ function App(){
         			} />
         		<Route path="/signup" element={<Signup />} />
 				<Route path="/account" element={<Account />} />
+				<Route path="/listings" element={<Listings />} />
       		</Routes>
 	  </div>
 	);
