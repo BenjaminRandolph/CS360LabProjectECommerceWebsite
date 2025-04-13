@@ -4,6 +4,7 @@ import { Routes, Route, Link } from 'react-router-dom'
 import Signup from './Signup'
 import Account from './Account'
 import Listings from './Listings'
+import Home from './Home'
 
 function App(){
 	return(
@@ -11,7 +12,7 @@ function App(){
 			<nav className="navbar navbar-expand-lg bg-body-tertiary position-absolute top-0 start-0">
 				<div className="container-fluid">
 					<nav>
-        				<Link to="/" className='navbar-brand'>BDB</Link>
+        				<Link to="/home" className='navbar-brand'>BDB</Link>
       				</nav>
 					<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 						<span className="navbar-toggler-icon"></span>
@@ -59,6 +60,7 @@ function App(){
         		<Route path="/signup" element={<Signup />} />
 				<Route path="/account" element={<Account />} />
 				<Route path="/listings" element={<Listings />} />
+				<Route path="/home" element={<Home />} />
       		</Routes>
 	  </div>
 	);
