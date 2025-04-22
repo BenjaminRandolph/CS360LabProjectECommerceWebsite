@@ -43,7 +43,7 @@ namespace Lab_E_Commerce_Website_API.Controllers
         }
 
         // GET: api/Carts/CartLookup/5
-        [HttpGet("/CartLookup/{id}")]
+        [HttpGet("CartLookup/{id}")]
         public async Task<ActionResult<List<ItemListing>>> GetCartOfUser(int id)
         {
             var carts = await _context.Carts.Where<Cart>(cart => cart.UserID == id).ToListAsync<Cart>();
@@ -53,7 +53,7 @@ namespace Lab_E_Commerce_Website_API.Controllers
             foreach (var cart in carts)
             {
                 var item = await _context.ItemListings.FindAsync(cart.ListingID);
-                if(item == null)
+                if(item != null)
                 {
                     items.Add(item);
                 }
