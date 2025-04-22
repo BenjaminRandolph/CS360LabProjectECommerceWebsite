@@ -30,7 +30,7 @@ namespace Lab_E_Commerce_Website_API.Controllers
 
         // GET: api/Carts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cart>> GetCart(int id)
+        public async Task<ActionResult<Cart>> GetCartRow(int id)
         {
             var cart = await _context.Carts.FindAsync(id);
 
@@ -40,6 +40,34 @@ namespace Lab_E_Commerce_Website_API.Controllers
             }
 
             return cart;
+        }
+
+        // GET: api/Carts/CartLookup/5
+        [HttpGet("/CartLookup/{id}")]
+        public async Task<ActionResult<List<ItemListing>>> GetCartOfUser(int id)
+        {
+            var carts = await _context.Carts.Where<Cart>(cart => cart.UserID == id).ToListAsync<Cart>();
+
+            List<ItemListing> items = new List<ItemListing>();
+
+            foreach (var cart in carts)
+            {
+                var item = await _context.ItemListings.FindAsync(cart.ListingID);
+                if(item == null)
+                {
+                    items.Add(item);
+                }
+            }
+            
+
+            if (items.Count <= 0)
+            {
+                return NotFound();
+            }
+
+            ActionResult<List<ItemListing>> itemsToReturn = new ActionResult<List<ItemListing>>(items);
+
+            return itemsToReturn;
         }
 
         // PUT: api/Carts/5
