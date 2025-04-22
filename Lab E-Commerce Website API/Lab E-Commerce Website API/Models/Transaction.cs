@@ -6,7 +6,7 @@
     {
         public int ID { get; set; }
 
-        public int PostedID { get; set; }
+        public int PosterID { get; set; }
 
         public string? ProductName { get; set; }
 

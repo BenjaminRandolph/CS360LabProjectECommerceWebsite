@@ -18,6 +18,6 @@ namespace Lab_E_Commerce_Website_API.Models
 
         public int Funds { get; set; }
 
-        public bool AdminPermissions { get; set; }
+        public bool AdminPermission { get; set; }
     }
 }

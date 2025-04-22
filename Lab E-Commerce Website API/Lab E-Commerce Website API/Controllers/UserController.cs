@@ -26,14 +26,14 @@ namespace Lab_E_Commerce_Website_API.Controllers
             _context = context;
         }
 
-        // GET: api/UserAccounts
+        // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetuserAccounts()
         {
             return await _context.Users.ToListAsync();
         }
 
-        // GET: api/UserAccounts/<any existing user id>
+        // GET: api/Users/<any existing user id>
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUserAccount(int id)
         {
@@ -47,7 +47,7 @@ namespace Lab_E_Commerce_Website_API.Controllers
             return userAccount;
         }
 
-        // GET: api/UserAccounts/LoginUser
+        // GET: api/Users/LoginUser
         [HttpGet("LoginUser/{userName}/{password}")]
         public async Task<ActionResult<User>> LoginUserAccount(string userName, string password)
         {
@@ -77,7 +77,7 @@ namespace Lab_E_Commerce_Website_API.Controllers
             }
         }
 
-        // PUT: api/UserAccounts/<any user id>
+        // PUT: api/Users/<any user id>
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUserAccount(int id, User userAccount)
@@ -108,7 +108,7 @@ namespace Lab_E_Commerce_Website_API.Controllers
             return NoContent();
         }
 
-        // POST: api/UserAccounts
+        // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<User>> PostUserAccount(User userAccount)
@@ -120,7 +120,7 @@ namespace Lab_E_Commerce_Website_API.Controllers
             return CreatedAtAction("GetUserAccount", new { id = userAccount.ID }, userAccount);
         }
 
-        // DELETE: api/UserAccounts/<any existing user id>
+        // DELETE: api/Users/<any existing user id>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserAccount(int id)
         {
