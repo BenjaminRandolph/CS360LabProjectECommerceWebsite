@@ -29,40 +29,13 @@ function Listings(){
 		<section className="">
 		  <div className="container">
 		    <div className="row">
-		      <div className="col-lg-3">
-		        <button
-		                className="btn btn-outline-secondary mb-3 w-100 d-lg-none"
-		                type="button"
-		                data-mdb-toggle="collapse"
-		                data-mdb-target="#navbarSupportedContent"
-		                aria-controls="navbarSupportedContent"
-		                aria-expanded="false"
-		                aria-label="Toggle navigation"
-		                >
-		          <span>Show filter</span>
-		        </button>
-		      </div>
 		      <div className="col-lg-9">
-		        <header className="d-sm-flex align-items-center border-bottom mb-4 pb-3">
-		          <strong className="d-block py-2">32 Items found </strong>
-		          <div className="ms-auto">
-		            <select className="form-select d-inline-block w-auto border pt-1">
-		              <option value="0">Best match</option>
-		              <option value="1">Recommended</option>
-		              <option value="2">High rated</option>
-		              <option value="3">Randomly</option>
-		            </select>
-		            
-		          </div>
-		        </header>
-
 		        <div className="row">
 		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
 		            <div className="card w-100 my-2 shadow-2-strong">
-		              <img src="https://mdbootstrap.com/img/bootstrap-ecommerce/items/10.webp" className="card-img-top" />
 		              <div className="card-body d-flex flex-column">
 		                <div className="d-flex flex-row">
-		                  <h5 className="mb-1 me-1">$34,50</h5>
+		                  <h5 className="mb-1 me-1">$34.50</h5>
 		                  <span className="text-danger"><s>$49.99</s></span>
 		                </div>
 		                <p className="card-text">T-shirts with multiple colors, for men and lady</p>
@@ -74,7 +47,6 @@ function Listings(){
 		          </div>
 		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
 		            <div className="card w-100 my-2 shadow-2-strong">
-		              <img src="https://mdbootstrap.com/img/bootstrap-ecommerce/items/11.webp" className="card-img-top" />
 		              <div className="card-body d-flex flex-column">
 		                <h5 className="card-title">$120.00</h5>
 		                <p className="card-text">Winter Jacket for Men and Women, All sizes</p>
@@ -86,7 +58,6 @@ function Listings(){
 		          </div>
 		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
 		            <div className="card w-100 my-2 shadow-2-strong">
-		              <img src="https://mdbootstrap.com/img/bootstrap-ecommerce/items/12.webp" className="card-img-top" />
 		              <div className="card-body d-flex flex-column">
 		                <h5 className="card-title">$120.00</h5>
 		                <p className="card-text">T-shirts with multiple colors, for men and lady</p>
@@ -98,7 +69,6 @@ function Listings(){
 		          </div>
 		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
 		            <div className="card w-100 my-2 shadow-2-strong">
-		              <img src="https://mdbootstrap.com/img/bootstrap-ecommerce/items/13.webp" className="card-img-top" />
 		              <div className="card-body d-flex flex-column">
 		                <h5 className="card-title">$120.00</h5>
 		                <p className="card-text">Blazer Suit Dress Jacket for Men, Blue color</p>
@@ -110,7 +80,6 @@ function Listings(){
 		          </div>
 		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
 		            <div className="card w-100 my-2 shadow-2-strong">
-		              <img src="https://mdbootstrap.com/img/bootstrap-ecommerce/items/14.webp" className="card-img-top" />
 		              <div className="card-body d-flex flex-column">
 		                <h5 className="card-title">$510.00</h5>
 		                <p className="card-text">Slim sleeve wallet Italian leather - multiple colors</p>
@@ -122,7 +91,6 @@ function Listings(){
 		          </div>
 		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
 		            <div className="card w-100 my-2 shadow-2-strong">
-		              <img src="https://mdbootstrap.com/img/bootstrap-ecommerce/items/10.webp" className="card-img-top" />
 		              <div className="card-body d-flex flex-column">
 		                <h5 className="card-title">$79.99</h5>
 		                <p className="card-text">T-shirts with multiple colors, for men and lady</p>
@@ -134,7 +102,6 @@ function Listings(){
 		          </div>
 		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
 		            <div className="card w-100 my-2 shadow-2-strong">
-		              <img src="https://mdbootstrap.com/img/bootstrap-ecommerce/items/11.webp" className="card-img-top" />
 		              <div className="card-body d-flex flex-column">
 		                <h5 className="card-title">$120.00</h5>
 		                <p className="card-text">Winter Jacket for Men and Women, All sizes</p>
@@ -146,7 +113,6 @@ function Listings(){
 		          </div>
 		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
 		            <div className="card w-100 my-2 shadow-2-strong">
-		              <img src="https://mdbootstrap.com/img/bootstrap-ecommerce/items/12.webp" className="card-img-top" />
 		              <div className="card-body d-flex flex-column">
 		                <h5 className="card-title">$120.00</h5>
 		                <p className="card-text">T-shirts with multiple colors, for men and lady</p>
@@ -158,7 +124,6 @@ function Listings(){
 		          </div>
 		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
 		            <div className="card w-100 my-2 shadow-2-strong">
-		              <img src="https://mdbootstrap.com/img/bootstrap-ecommerce/items/9.webp" className="card-img-top" />
 		              <div className="card-body d-flex flex-column">
 		                <h5 className="card-title">$43.50</h5>
 		                <p className="card-text">Summer New Men's Denim Jeans Shorts</p>
