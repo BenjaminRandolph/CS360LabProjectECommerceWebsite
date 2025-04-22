@@ -167,7 +167,6 @@ function Checkout(){
 										<span className="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
 											1
 										</span>
-										<img src="https://mdbootstrap.com/img/bootstrap-ecommerce/items/7.webp" className="img-sm rounded border" />
 									</div>
 									<div className="">
 										<a href="#" className="nav-link">
@@ -183,7 +182,6 @@ function Checkout(){
 										<span className="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
 											1
 										</span>
-										<img src="https://mdbootstrap.com/img/bootstrap-ecommerce/items/5.webp" className="img-sm rounded border" />
 									</div>
 									<div className="">
 										<a href="#" className="nav-link">
@@ -199,7 +197,6 @@ function Checkout(){
 										<span className="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
 											3
 										</span>
-										<img src="https://mdbootstrap.com/img/bootstrap-ecommerce/items/1.webp" className="img-sm rounded border" />
 									</div>
 									<div className="">
 										<a href="#" className="nav-link">GoPro HERO6 4K Action Camera - Black</a>
