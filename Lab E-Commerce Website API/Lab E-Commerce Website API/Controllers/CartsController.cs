@@ -49,13 +49,18 @@ namespace Lab_E_Commerce_Website_API.Controllers
             var carts = await _context.Carts.Where<Cart>(cart => cart.UserID == id).ToListAsync<Cart>();
 
             List<ItemListing> items = new List<ItemListing>();
+            List<int> previousCheckedListings = new List<int>();
 
             foreach (var cart in carts)
             {
-                var item = await _context.ItemListings.FindAsync(cart.ListingID);
-                if(item != null)
+                if (!previousCheckedListings.Contains(cart.ListingID))
                 {
-                    items.Add(item);
+                    previousCheckedListings.Add(cart.ListingID);
+                    var item = await _context.ItemListings.FindAsync(cart.ListingID);
+                    if (item != null)
+                    {
+                        items.Add(item);
+                    }
                 }
             }
             
