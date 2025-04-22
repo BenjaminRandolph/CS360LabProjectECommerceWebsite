@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 
 function App(){
 	const [users, setUsers] = useState<any>(null);
-
+	const [currentUser, setCurrentUser] = useState<any>(null);
 	const [username, setUsername] = useState('');
 	const [userpass, setUserpass] = useState('');
 
@@ -35,14 +35,17 @@ function App(){
     	e.preventDefault();
 
     	fetch('https://localhost:7207/api/UserAccounts/LoginUser/' + username + '/' + userpass)
-			.then(res => {
-				if (res.ok) {
-					navigate('/home');
-				}
-			})
-			.catch(error => {
-				console.error('Login error', error);
-			});
+  			.then(res => res.json())
+  			.then(data => {
+  			  if (data) {
+  			    setCurrentUser(data);
+  			    navigate('/home');
+  			  }
+  			})
+  			.catch(error => {
+  			  console.error('Login error', error);
+  			});
+
   	};
 	
 	return(
@@ -117,7 +120,8 @@ function App(){
 				<Route path="/listings" element={<Listings />} />
 				<Route path="/home" element={<Home />} />
 				<Route path="/checkout" element={<Checkout />} />
-				<Route path="/cart" element={<Cart />} />
+				<Route path="/cart" element={<Cart currentUser={currentUser} />} />
+
       		</Routes>
 	  </div>
 	);

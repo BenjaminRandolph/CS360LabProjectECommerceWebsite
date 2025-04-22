@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function Cart(){
+type CartProps = {
+	currentUser: any;
+};
+
+function Cart({ currentUser }: CartProps){
+	const userId = currentUser?.id;
 	const [cartItems, setCartItems] = useState([
 		{
 		  id: 1,
@@ -38,6 +43,24 @@ function Cart(){
 	const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 	const tax = Math.round(totalPrice * 0.05 * 100) / 100;
 	const grandTotal = totalPrice + tax;
+
+	const addToCart = async (itemId: number) => {
+		try {
+		  const response = await fetch('https://localhost:7207/api/Carts', {
+			method: 'POST',
+			headers: {
+			  'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+			  userId,
+			  productId: itemId,
+			  quantity: 1,
+			}),
+		  });
+		} catch (error) {
+		  console.error(error);
+		}
+	  };
 	
 	return(
 		<><header>
@@ -154,7 +177,7 @@ function Cart(){
 					<del className="">$24.99</del>
 				  </div>
 				  <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-					<a href="#" className="btn btn-outline-primary w-100">Add to cart</a>
+					<a onClick={() => addToCart(123)} className="btn btn-outline-primary w-100">Add to cart</a>
 				  </div>
 				</div>
 			  </div>
@@ -172,7 +195,7 @@ function Cart(){
 					<strong className="">$120.00</strong>
 				  </div>
 				  <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-					<a href="#" className="btn btn-outline-primary w-100">Add to cart</a>
+					<a onClick={() => addToCart(123)} className="btn btn-outline-primary w-100">Add to cart</a>
 				  </div>
 				</div>
 			  </div>
@@ -190,7 +213,7 @@ function Cart(){
 					<strong className="">$80.50</strong>
 				  </div>
 				  <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-					<a href="#" className="btn btn-outline-primary w-100">Add to cart</a>
+					<a onClick={() => addToCart(123)} className="btn btn-outline-primary w-100">Add to cart</a>
 				  </div>
 				</div>
 			  </div>
@@ -208,7 +231,7 @@ function Cart(){
 					<strong className="">$13.90</strong>
 				  </div>
 				  <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-					<a href="#" className="btn btn-outline-primary w-100">Add to cart</a>
+					<a onClick={() => addToCart(123)} className="btn btn-outline-primary w-100">Add to cart</a>
 				  </div>
 				</div>
 			  </div>
