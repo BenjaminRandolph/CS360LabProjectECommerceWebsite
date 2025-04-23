@@ -54,22 +54,26 @@ namespace Lab_E_Commerce_Website_API.Controllers
             var userAccount = await _context.Users.Where<User>(thing => (thing.UserName == userName)).ToListAsync();
 
             bool ready = false;
+            int returnID = 0;
+            PasswordVerificationResult result;
 
             if (userAccount.Count > 0)
             {
                 foreach (var user in userAccount)
                 {
-                    PasswordVerificationResult result = passwordHasher.VerifyHashedPassword(user, user.Password, password);
+                    result = passwordHasher.VerifyHashedPassword(user, user.Password, password);
                     if (user.UserName != "" && user.UserName != null && user.Password != "" && user.Password != null && result == PasswordVerificationResult.Success)
                     {
+                        returnID = user.ID;
                         ready = true;
+                        break;
                     }
                 }
             }
 
             if (ready)
             {
-                return Ok();
+                return Ok(returnID);
             }
             else
             {
