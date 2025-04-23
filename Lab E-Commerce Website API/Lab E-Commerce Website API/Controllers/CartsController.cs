@@ -114,7 +114,7 @@ namespace Lab_E_Commerce_Website_API.Controllers
             _context.Carts.Add(cart);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCart", new { id = cart.ID }, cart);
+            return CreatedAtAction("GetCartRow", new { id = cart.ID }, cart);
         }
 
         // DELETE: api/Carts/5
