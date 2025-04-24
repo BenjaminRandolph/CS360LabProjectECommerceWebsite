@@ -2,16 +2,18 @@ function Checkout(){
 	return(
 		<><header>
 			<div className="p-3 text-center bg-white border-bottom">
-				<div className="container">
-					<div className="d-flex justify-content-between">
-						<div className="">
-							<a href="https://mdbootstrap.com/" target="_blank" className="">
-								<img src="https://mdbootstrap.com/img/logo/mdb-transaprent-noshadows.png" height="35" />
-							</a>
-						</div>
-					</div>
+		  <div className="container">
+			<div className="row gy-3">
+			  <div className="col-lg-5 col-md-12 col-12">
+				<div className="input-group float-center position-absolute top-0 start-50">
+				  <div className="form-outline">
+					<input type="search" id="form1" className="form-control" placeholder="Search"/>
+				  </div>
 				</div>
+			  </div>
 			</div>
+		  </div>
+		</div>
 		</header><section className="bg-light py-5">
 				<div className="container">
 					<div className="row">

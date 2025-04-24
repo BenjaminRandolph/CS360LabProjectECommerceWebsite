@@ -36,7 +36,7 @@ function Signup(){
 		}
 	
 		try {
-		  const response = await fetch('https://localhost:7207/api/UserAccounts', {
+		  const response = await fetch('https://localhost:7096/api/User', {
 			method: 'POST',
 			headers: {
 			  'Content-Type': 'application/json',

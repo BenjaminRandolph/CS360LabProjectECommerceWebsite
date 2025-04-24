@@ -1,77 +1,146 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 type CartProps = {
 	currentUser: any;
 };
 
+type CartItem = {
+	cartID: number;
+	id: number;
+	name: string;
+	description: string;
+	price: number;
+	quantity: number;
+};
+
+type Item = {
+	id: number;
+	ownerID: number;
+	name: string;
+	description: string;
+	price: number;
+	category: string;
+	dateOfPosting: string;
+};
+
 function Cart({ currentUser }: CartProps){
-	const userId = currentUser?.id;
-	const [cartItems, setCartItems] = useState([
-		{
-		  id: 1,
-		  name: "Winter jacket for men and lady",
-		  description: "Yellow, Jeans",
-		  price: 460,
-		  quantity: 1,
-		},
-		{
-		  id: 2,
-		  name: "Mens T-shirt Cotton Base",
-		  description: "Blue, Medium",
-		  price: 12.2,
-		  quantity: 2,
-		},
-		{
-		  id: 3,
-		  name: "Blazer Suit Dress Jacket for Men",
-		  description: "XL size, Jeans, Blue",
-		  price: 460,
-		  quantity: 1,
-		},
-	]);
-	const updateQuantity = (id: number, quantity: any) => {
+	const userId = currentUser?.ID;
+	const [cartItems, setCartItems] = useState<CartItem[]>([]);
+	const [recommended, setRecommended] = useState<Item[]>([]);
+	
+	const updateQuantity = (id: number, quantity: number) => {
 		setCartItems(prev =>
-		  prev.map(item => item.id === id ? { ...item, quantity: Number(quantity) } : item)
+			prev.map(item => item.id === id ? { ...item, quantity } : item)
 		);
 	};
+	  
 	
-	const removeItem = (id: number) => {
-		setCartItems(prev => prev.filter(item => item.id !== id));
+	const removeItem = async (cartId: number) => {
+		try {
+		  const res = await fetch('https://localhost:7096/api/Carts/' + cartId, {
+			method: 'DELETE',
+		  });
+	  
+		  if (!res.ok) throw new Error("Failed to delete item from backend");
+	  
+		  setCartItems(prev => prev.filter(item => item.cartID !== cartId));
+		  fetchCartItems();
+		} catch (error) {
+		  console.error("Error deleting cart item:", error);
+		}
 	};
+	  
 	
 	const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 	const tax = Math.round(totalPrice * 0.05 * 100) / 100;
 	const grandTotal = totalPrice + tax;
-
-	const addToCart = async (itemId: number) => {
+	const addToCart = async (listingID: number) => {
 		try {
-		  const response = await fetch('https://localhost:7207/api/Carts', {
+		  const response = await fetch('https://localhost:7096/api/Carts', {
 			method: 'POST',
 			headers: {
 			  'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-			  userId,
-			  productId: itemId,
-			  quantity: 1,
+			  id: 0,
+			  userID: currentUser?.ID,
+			  listingID: listingID,
 			}),
 		  });
+		  fetchCartItems();
 		} catch (error) {
 		  console.error(error);
 		}
+		if (!currentUser?.ID) {
+			console.error("User ID is missing.");
+			console.log("Adding to cart. Current user:", currentUser);
+			return;
+		  }
 	  };
+
+		const fetchCartItems = async () => {
+		  try {
+			const res = await fetch('https://localhost:7096/api/Carts/');
+			const cartData = await res.json();
+	  
+			console.log("Fetched cart data:", cartData);
+	  
+			const enrichedItems: CartItem[] = await Promise.all(
+			  cartData.map(async (cartItem: { id: number; listingID: number }) => {
+				const listingRes = await fetch('https://localhost:7096/api/ItemListings/' + cartItem.listingID);
+				const itemData = await listingRes.json();
+	  
+				return {
+				  id: cartItem.id,
+				  name: itemData.name,
+				  description: itemData.description,
+				  price: itemData.price,
+				  quantity: 1,
+				};
+			  })
+			);
+	  
+			setCartItems(enrichedItems);
+		  } catch (error) {
+			console.error("Error fetching cart items:", error);
+		  }
+		};
+
+	  useEffect(() => {
+		if (userId) {
+		  fetchCartItems();
+		  console.log("Fetching cart items for userId:", userId);
+		  console.log("Current user object:", currentUser);
+		  console.log("Cart items in state:", cartItems);
+		}
+	  }, [userId]);
+
+	  useEffect(() => {
+		const fetchRecommended = async () => {
+		  try {
+			const response = await fetch("https://localhost:7096/api/ItemListings");
+			if (!response.ok) throw new Error("Failed to fetch products");
+	  
+			const data = await response.json();
+			
+			const shuffled = [...data].sort(() => 0.5 - Math.random());
+			const selected = shuffled.slice(0, 4);
+	  
+			setRecommended(selected);
+		  } catch (error) {
+			console.error("Error fetching recommended items:", error);
+		  }
+		};
+	  
+		fetchRecommended();
+	  }, []);	  
 	
 	return(
 		<><header>
 		<div className="p-3 text-center bg-white border-bottom">
 		  <div className="container">
 			<div className="row gy-3">
-			  <div className="col-lg-2 col-sm-4 col-4">
-				<a href="https://mdbootstrap.com/" target="_blank" className="float-start">
-				  <img src="https://mdbootstrap.com/img/logo/mdb-transaprent-noshadows.png" height="35" />
-				</a>
-			  </div>
 			  <div className="col-lg-5 col-md-12 col-12">
 				<div className="input-group float-center position-absolute top-0 start-50">
 				  <div className="form-outline">
@@ -104,7 +173,7 @@ function Cart({ currentUser }: CartProps){
   		              </div>
   		              <div className="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
   		                <div>
-  		                  	<select className="form-select me-4" value={item.quantity} onChange={(e) => updateQuantity(item.id, e.target.value)}>
+  		                  	<select className="form-select me-4" value={item.quantity} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateQuantity(item.id, parseInt(e.target.value))}>
   		                    	{[1, 2, 3, 4].map(q => (<option key={q}>{q}</option>))}
   		                  	</select>
   		                </div>
@@ -160,82 +229,24 @@ function Cart({ currentUser }: CartProps){
 		  </header>
 	  
 		  <div className="row">
-			<div className="col-lg-3 col-md-6 col-sm-6">
-			  <div className="card px-4 border shadow-0 mb-4 mb-lg-0">
-				<div className="mask px-2" >
-				  <div className="d-flex justify-content-between">
-					<h6><span className="badge bg-danger pt-1 mt-3 ms-2">New</span></h6>
-					<a href="#"><i className="fas fa-heart text-primary fa-lg float-end pt-3 m-2"></i></a>
-				  </div>
-				</div>
-				<a href="#" className="">
-				</a>
-				<div className="card-body d-flex flex-column pt-3 border-top">
-				  <a href="#" className="nav-link">Gaming Headset with Mic</a>
-				  <div className="price-wrap mb-2">
-					<strong className="">$18.95</strong>
-					<del className="">$24.99</del>
-				  </div>
-				  <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-					<a onClick={() => addToCart(123)} className="btn btn-outline-primary w-100">Add to cart</a>
-				  </div>
-				</div>
+		  {recommended.map((item) => (
+			  <div className="col-lg-3 col-md-6 col-sm-6" key={item.id}>
+			    <div className="card px-4 border shadow-0 mb-4 mb-lg-0">
+			      <div className="card-body d-flex flex-column pt-3 border-top">
+			        <span className="nav-link">{item.name}</span>
+			        <p className="text-muted">{item.description}</p>
+			        <div className="price-wrap mb-2">
+			          <strong>${item.price.toFixed(2)}</strong>
+			        </div>
+			        <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
+			          <button onClick={() => addToCart(item.id)} className="btn btn-outline-primary w-100">
+			            Add to cart
+			          </button>
+			        </div>
+			      </div>
+			    </div>
 			  </div>
-			</div>
-			<div className="col-lg-3 col-md-6 col-sm-6">
-			  <div className="card px-4 border shadow-0 mb-4 mb-lg-0">
-				<div className="mask px-2" >
-				  <a href="#"><i className="fas fa-heart text-primary fa-lg float-end pt-3 m-2"></i></a>
-				</div>
-				<a href="#" className="">
-				</a>
-				<div className="card-body d-flex flex-column pt-3 border-top">
-				  <a href="#" className="nav-link">Apple Watch Series 1 Sport </a>
-				  <div className="price-wrap mb-2">
-					<strong className="">$120.00</strong>
-				  </div>
-				  <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-					<a onClick={() => addToCart(123)} className="btn btn-outline-primary w-100">Add to cart</a>
-				  </div>
-				</div>
-			  </div>
-			</div>
-			<div className="col-lg-3 col-md-6 col-sm-6">
-			  <div className="card px-4 border shadow-0">
-				<div className="mask px-2" >
-				  <a href="#"><i className="fas fa-heart text-primary fa-lg float-end pt-3 m-2"></i></a>
-				</div>
-				<a href="#" className="">
-				</a>
-				<div className="card-body d-flex flex-column pt-3 border-top">
-				  <a href="#" className="nav-link">Men's Denim Jeans Shorts</a>
-				  <div className="price-wrap mb-2">
-					<strong className="">$80.50</strong>
-				  </div>
-				  <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-					<a onClick={() => addToCart(123)} className="btn btn-outline-primary w-100">Add to cart</a>
-				  </div>
-				</div>
-			  </div>
-			</div>
-			<div className="col-lg-3 col-md-6 col-sm-6">
-			  <div className="card px-4 border shadow-0">
-				<div className="mask px-2">
-				  <a href="#"><i className="fas fa-heart text-primary fa-lg float-end pt-3 m-2"></i></a>
-				</div>
-				<a href="#" className="">
-				</a>
-				<div className="card-body d-flex flex-column pt-3 border-top">
-				  <a href="#" className="nav-link">Mens T-shirt Cotton Base Layer Slim fit </a>
-				  <div className="price-wrap mb-2">
-					<strong className="">$13.90</strong>
-				  </div>
-				  <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-					<a onClick={() => addToCart(123)} className="btn btn-outline-primary w-100">Add to cart</a>
-				  </div>
-				</div>
-			  </div>
-			</div>
+			))}
 		  </div>
 		</div>
 	  </section>
