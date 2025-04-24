@@ -118,10 +118,22 @@ namespace Lab_E_Commerce_Website_API.Controllers
         public async Task<ActionResult<User>> PostUserAccount(User userAccount)
         {
             userAccount.Password = passwordHasher.HashPassword(userAccount, userAccount.Password);
-            _context.Users.Add(userAccount);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUserAccount", new { id = userAccount.ID }, userAccount);
+            var matchResult = await _context.Users.Where<User>(userRow => userRow.UserName == userAccount.UserName
+                                                                          && userRow.Password == userAccount.Password
+                                                                          && userRow.PhoneNumber == userAccount.PhoneNumber
+                                                                          && userRow.Address == userAccount.Address
+                                                                          && userRow.Email == userAccount.Email).ToListAsync<User>();
+
+            if (matchResult.Count == 0)
+            {
+                _context.Users.Add(userAccount);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetUserAccount", new { id = userAccount.ID }, userAccount);
+            }
+
+            return BadRequest();
         }
 
         // DELETE: api/Users/<any existing user id>

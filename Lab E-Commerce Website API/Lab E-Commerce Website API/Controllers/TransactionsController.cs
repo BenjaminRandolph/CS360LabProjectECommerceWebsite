@@ -78,10 +78,24 @@ namespace Lab_E_Commerce_Website_API.Controllers
         [HttpPost]
         public async Task<ActionResult<Transaction>> PostTransaction(Transaction transaction)
         {
-            _context.Transactions.Add(transaction);
-            await _context.SaveChangesAsync();
+            var matchResult = await _context.Transactions.Where<Transaction>(transactionRow => transactionRow.PosterID == transaction.PosterID
+                                                                                               && transactionRow.ProductName == transaction.ProductName
+                                                                                               && transactionRow.ProductDescription == transaction.ProductDescription
+                                                                                               && transactionRow.AmountPaid == transaction.AmountPaid
+                                                                                               && transactionRow.AmountOfProduct == transaction.AmountOfProduct
+                                                                                               && transactionRow.Category == transaction.Category
+                                                                                               && transactionRow.PurchaserID == transaction.PurchaserID
+                                                                                               && transactionRow.DateOfPurchase == transaction.DateOfPurchase).ToListAsync<Transaction>();
 
-            return CreatedAtAction("GetTransaction", new { id = transaction.ID }, transaction);
+            if (matchResult.Count == 0)
+            {
+                _context.Transactions.Add(transaction);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetTransaction", new { id = transaction.ID }, transaction);
+            }
+
+            return BadRequest();
         }
 
         // DELETE: api/Transactions/5

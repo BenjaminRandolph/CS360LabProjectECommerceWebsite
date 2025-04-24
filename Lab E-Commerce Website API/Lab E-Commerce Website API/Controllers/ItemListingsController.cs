@@ -80,10 +80,21 @@ namespace Lab_E_Commerce_Website_API.Controllers
         [HttpPost]
         public async Task<ActionResult<ItemListing>> PostItemListing(ItemListing itemListing)
         {
-            _context.ItemListings.Add(itemListing);
-            await _context.SaveChangesAsync();
+            var matchResult = await _context.ItemListings.Where<ItemListing>(itemRow => itemRow.OwnerID == itemListing.OwnerID
+                                                                                        && itemRow.Price == itemListing.Price
+                                                                                        && itemRow.Name == itemListing.Name
+                                                                                        && itemRow.Description == itemListing.Description
+                                                                                        && itemRow.Category == itemListing.Category).ToListAsync<ItemListing>();
 
-            return CreatedAtAction("GetItemListing", new { id = itemListing.ID }, itemListing);
+            if (matchResult.Count == 0)
+            {
+                _context.ItemListings.Add(itemListing);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetItemListing", new { id = itemListing.ID }, itemListing);
+            }
+
+            return BadRequest();
         }
 
         // DELETE: api/ItemListings/<any listing id>
