@@ -93,11 +93,6 @@ function App(){
         						<Link to="/cart" className='nav-link'>Cart</Link>
       							</nav>
 					  		</li>
-							<li className="nav-item">
-								<nav>
-        						<Link to="/checkout" className='nav-link'>Checkout</Link>
-      							</nav>
-					  		</li>
 						</ul>
 				  	</div>
 				</div>
@@ -122,9 +117,9 @@ function App(){
         			  </div>
         			} />
         		<Route path="/signup" element={<Signup />} />
-				<Route path="/account" element={<Account />} />
-				<Route path="/listings" element={<Listings />} />
-				<Route path="/home" element={<Home />} />
+				<Route path="/account" element={<Account currentUser={currentUser}/>} />
+				<Route path="/listings" element={<Listings currentUser={currentUser} />} />
+				<Route path="/home" element={<Home currentUser={currentUser}/>} />
 				<Route path="/checkout" element={<Checkout />} />
 				<Route path="/cart" element={<Cart currentUser={currentUser} />} />
 

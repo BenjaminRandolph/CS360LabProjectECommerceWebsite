@@ -1,34 +1,83 @@
-function Home(){
+import { useState, useEffect } from "react";
+
+type HomeProps = {
+	currentUser: any;
+};
+
+type Item = {
+	id: number;
+	ownerID: number;
+	name: string;
+	description: string;
+	price: number;
+	category: string;
+	dateOfPosting: string;
+};
+
+function Home({ currentUser }: HomeProps){
+const [items, setItems] = useState<Item[]>([]);
+	const userID = currentUser?.ID;
+
+	useEffect(() => {
+		const fetchItems = async () => {
+			try {
+				const res = await fetch("https://localhost:7096/api/ItemListings");
+				if (!res.ok) throw new Error("Failed to fetch items");
+				const data = await res.json();
+	
+				const sortedItems = data
+					.sort((a: Item, b: Item) => new Date(b.dateOfPosting).getTime() - new Date(a.dateOfPosting).getTime())
+					.slice(0, 4);
+	
+				setItems(sortedItems);
+			} catch (err) {
+				console.error("Error loading items:", err);
+			}
+		};
+		fetchItems();
+	}, []);
+	
+	  
+	  const addToCart = async (listingID: number) => {
+		try {
+		  const response = await fetch('https://localhost:7096/api/Carts', {
+			method: 'POST',
+			headers: {
+			  'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+			  id: 0,
+			  userID: userID,
+			  listingID: listingID,
+			}),
+		  });
+		} catch (error) {
+		  console.error(error);
+		}
+		if (!currentUser?.ID) {
+			console.error("User ID is missing.");
+			console.log("Adding to cart. Current user:", currentUser);
+			return;
+		}
+		console.log("User ID:", userID);
+		console.log("Adding item to cart:", listingID);
+	  };
+
 	return(
 		<><header>
-			<div className="p-3 text-center bg-white border-bottom">
-				<div className="container">
-					<div className="row gy-3">
-						<div className="col-lg-2 col-sm-4 col-4">
-							<a href="https://mdbootstrap.com/" target="_blank" className="float-start">
-								<img src="https://mdbootstrap.com/img/logo/mdb-transaprent-noshadows.png" height="35" />
-							</a>
-						</div>
-						<div className="col-lg-5 col-md-12 col-12">
-							<div className="input-group float-center position-absolute top-0 start-50">
-								<div className="form-outline">
-									<input type="search" id="form1" className="form-control" placeholder="Search"/>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			<br></br>
+			<br></br>
+			<br></br>
 			<nav className="navbar navbar-expand-lg navbar-light bg-white">
 			</nav>
 			<div className="bg-primary text-white py-5">
 				<div className="container py-5">
 					<h1>
-						Best products & <br />
-						brands in our store
+						The website YOU NEED!!11!! <br />
+						:)
 					</h1>
 					<p>
-						Trendy Products, Factory Prices, Excellent Service
+						Please buy our stuff thx
 					</p>
 				</div>
 			</div>
@@ -39,94 +88,25 @@ function Home(){
 					</header>
 
 					<div className="row">
-						<div className="col-lg-3 col-md-6 col-sm-6 d-flex">
-							<div className="card w-100 my-2 shadow-2-strong">
-								<div className="card-body d-flex flex-column">
-									<h5 className="card-title">GoPro HERO6 4K Action Camera - Black</h5>
-									<p className="card-text">$790.50</p>
-									<div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-										<a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
+					{items.map((item) => (
+							<div key={item.id} className="col-lg-3 col-md-6 col-sm-6 d-flex">
+								<div className="card w-100 my-2 shadow-2-strong">
+									<div className="card-body d-flex flex-column">
+										<h5 className="card-title">{item.name}</h5>
+										<p className="card-text">${item.price.toFixed(2)}</p>
+										<p className="card-text">{item.description}</p>
+										<div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
+											<button
+												className="btn btn-primary shadow-0 me-1"
+												onClick={() => addToCart(item.id)}
+											>
+												Add to cart
+											</button>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div className="col-lg-3 col-md-6 col-sm-6 d-flex">
-							<div className="card w-100 my-2 shadow-2-strong">
-								<div className="card-body d-flex flex-column">
-									<h5 className="card-title">Canon camera 20x zoom, Black color EOS 2000</h5>
-									<p className="card-text">$320.00</p>
-									<div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-										<a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div className="col-lg-3 col-md-6 col-sm-6 d-flex">
-							<div className="card w-100 my-2 shadow-2-strong">
-								<div className="card-body d-flex flex-column">
-									<h5 className="card-title">Xiaomi Redmi 8 Original Global Version 4GB</h5>
-									<p className="card-text">$120.00</p>
-									<div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-										<a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div className="col-lg-3 col-md-6 col-sm-6 d-flex">
-							<div className="card w-100 my-2 shadow-2-strong">
-								<div className="card-body d-flex flex-column">
-									<h5 className="card-title">Apple iPhone 12 Pro 6.1" RAM 6GB 512GB Unlocked</h5>
-									<p className="card-text">$120.00</p>
-									<div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-										<a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div className="col-lg-3 col-md-6 col-sm-6 d-flex">
-							<div className="card w-100 my-2 shadow-2-strong">
-								<div className="card-body d-flex flex-column">
-									<h5 className="card-title">Apple Watch Series 1 Sport Case 38mm Black</h5>
-									<p className="card-text">$790.50</p>
-									<div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-										<a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div className="col-lg-3 col-md-6 col-sm-6 d-flex">
-							<div className="card w-100 my-2 shadow-2-strong">
-								<div className="card-body d-flex flex-column">
-									<h5 className="card-title">T-shirts with multiple colors, for men and lady</h5>
-									<p className="card-text">$120.00</p>
-									<div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-										<a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div className="col-lg-3 col-md-6 col-sm-6 d-flex">
-							<div className="card w-100 my-2 shadow-2-strong">
-								<div className="card-body d-flex flex-column">
-									<h5 className="card-title">Gaming Headset 32db Blackbuilt in mic</h5>
-									<p className="card-text">$99.50</p>
-									<div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-										<a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div className="col-lg-3 col-md-6 col-sm-6 d-flex">
-							<div className="card w-100 my-2 shadow-2-strong">
-								<div className="card-body d-flex flex-column">
-									<h5 className="card-title">T-shirts with multiple colors, for men and lady</h5>
-									<p className="card-text">$120.00</p>
-									<div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-										<a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
-									</div>
-								</div>
-							</div>
-						</div>
+						))}
 					</div>
 				</div>
 			</section></>

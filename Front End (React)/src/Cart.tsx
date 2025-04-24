@@ -137,21 +137,7 @@ function Cart({ currentUser }: CartProps){
 	  }, []);	  
 	
 	return(
-		<><header>
-		<div className="p-3 text-center bg-white border-bottom">
-		  <div className="container">
-			<div className="row gy-3">
-			  <div className="col-lg-5 col-md-12 col-12">
-				<div className="input-group float-center position-absolute top-0 start-50">
-				  <div className="form-outline">
-					<input type="search" id="form1" className="form-control" placeholder="Search"/>
-				  </div>
-				</div>
-			  </div>
-			</div>
-		  </div>
-		</div>
-	  </header>
+		<>
 	  <section className="bg-light my-5">
   		<div className="container">
   		  <div className="row">
@@ -213,7 +199,7 @@ function Cart({ currentUser }: CartProps){
   		          </div>
 			  
   		          <div className="mt-3">
-  		            <Link to="/checkout" className="btn btn-success w-100 shadow-0 mb-2">Make Purchase</Link>
+  		            <Link to="/checkout" className="btn btn-success w-100 shadow-0 mb-2">Checkout</Link>
   		            <Link to="/listings" className="btn btn-light w-100 border mt-2">Back to shop</Link>
   		          </div>
   		        </div>
