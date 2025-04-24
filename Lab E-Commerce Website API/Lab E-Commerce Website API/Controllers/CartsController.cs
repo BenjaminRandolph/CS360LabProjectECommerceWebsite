@@ -111,10 +111,17 @@ namespace Lab_E_Commerce_Website_API.Controllers
         [HttpPost]
         public async Task<ActionResult<Cart>> PostCart(Cart cart)
         {
-            _context.Carts.Add(cart);
-            await _context.SaveChangesAsync();
+            var matchResult = await _context.Carts.Where<Cart>(cartRow => cartRow.UserID == cart.UserID && cartRow.ListingID == cart.ListingID).ToListAsync<Cart>();
 
-            return CreatedAtAction("GetCartRow", new { id = cart.ID }, cart);
+            if (matchResult.Count == 0)
+            {
+                _context.Carts.Add(cart);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetCartRow", new { id = cart.ID }, cart);
+            }
+            
+            return BadRequest();
         }
 
         // DELETE: api/Carts/5
