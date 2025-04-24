@@ -18,7 +18,7 @@ function App(){
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		fetch('https://localhost:7207/api/UserAccounts')
+		fetch('https://localhost:7096/api/User')
 		  .then(res => {
 			if (!res.ok) {
 			  throw new Error(`HTTP error! Status: ${res.status}`);
@@ -34,24 +34,30 @@ function App(){
 	const handleSubmit = (e: React.FormEvent) => {
     	e.preventDefault();
 
-    	fetch('https://localhost:7207/api/UserAccounts/LoginUser/' + username + '/' + userpass)
-  			.then(res => res.json())
-  			.then(data => {
-  			  if (data) {
-  			    setCurrentUser(data);
-  			    navigate('/home');
+    	fetch('https://localhost:7096/api/User/LoginUser/' + username + '/' + userpass)
+  			.then(res => {
+  			  if (!res.ok) {
+  			    throw new Error('Login failed');
   			  }
+  			  return res.text();
   			})
+  			.then(userID => {
+				console.log("Raw userId response:", userID);
+				const parsedId = parseInt(userID.replace(/[^0-9]/g, ''));
+				if (isNaN(parsedId)) {
+				  console.error("Could not parse userId:", userID);
+				  return;
+				}
+				setCurrentUser({ ID: parsedId, username });
+				navigate("/home");
+			  })							
   			.catch(error => {
   			  console.error('Login error', error);
   			});
-
   	};
 	
 	return(
-		<div>
-      		{/* <pre>{users[0].userName}</pre> */}
-			
+		<div>			
     		<nav className="navbar navbar-expand-lg bg-body-tertiary position-absolute top-0 start-0">
 				<div className="container-fluid">
 					<nav>
