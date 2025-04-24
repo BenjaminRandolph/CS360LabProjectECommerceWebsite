@@ -120,7 +120,7 @@ function App(){
 				<Route path="/account" element={<Account currentUser={currentUser}/>} />
 				<Route path="/listings" element={<Listings currentUser={currentUser} />} />
 				<Route path="/home" element={<Home currentUser={currentUser}/>} />
-				<Route path="/checkout" element={<Checkout />} />
+				<Route path="/checkout" element={<Checkout currentUser={currentUser}/>} />
 				<Route path="/cart" element={<Cart currentUser={currentUser} />} />
 
       		</Routes>

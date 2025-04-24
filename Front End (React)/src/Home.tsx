@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 type HomeProps = {
 	currentUser: any;
@@ -15,8 +16,24 @@ type Item = {
 };
 
 function Home({ currentUser }: HomeProps){
-const [items, setItems] = useState<Item[]>([]);
+	const [items, setItems] = useState<Item[]>([]);
 	const userID = currentUser?.ID;
+	const [searchParams, setSearchParams] = useSearchParams();
+  	const [showBanner, setShowBanner] = useState(false);
+
+  	useEffect(() => {
+  	  if (searchParams.get("purchase") === "success") {
+  	    setShowBanner(true);
+
+  	    const timer = setTimeout(() => {
+  	      setShowBanner(false);
+  	      searchParams.delete("purchase");
+  	      setSearchParams(searchParams);
+  	    }, 3000);
+
+  	    return () => clearTimeout(timer);
+  	  }
+  	}, [searchParams, setSearchParams]);
 
 	useEffect(() => {
 		const fetchItems = async () => {
@@ -70,6 +87,13 @@ const [items, setItems] = useState<Item[]>([]);
 			<br></br>
 			<nav className="navbar navbar-expand-lg navbar-light bg-white">
 			</nav>
+			<div className="container">
+    		  {showBanner && (
+    		    <div className="alert alert-success text-center" role="alert">
+    		      Purchase Successful!
+    		    </div>
+    		  )}
+    		</div>
 			<div className="bg-primary text-white py-5">
 				<div className="container py-5">
 					<h1>

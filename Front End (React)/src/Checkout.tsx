@@ -1,4 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+type CheckProps = {
+	currentUser: any;
+};
 
 type CartItem = {
 	cartID: number;
@@ -9,8 +14,44 @@ type CartItem = {
 	quantity: number;
 };
 
-function Checkout(){
+function Checkout({ currentUser }: CheckProps){
+	const navigate = useNavigate();
 	const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+	const handleConfirmPurchase = async () => {
+		const purchaserID = currentUser!.ID;
+		const dateNow = new Date().toISOString();
+	  
+		try {
+		  await Promise.all(
+			cartItems.map(async (item) => {
+			  const transaction = {
+				id: 0,
+				posterID: item.ownerID,
+				productName: item.name,
+				productDescription: item.description,
+				amountPaid: item.price * item.quantity,
+				amountOfProduct: item.quantity,
+				category: "General",
+				purchaserID: purchaserID,
+				dateOfPurchase: dateNow,
+				dateOfPosting: item.dateOfPosting,
+			  };
+	  
+			  await fetch("https://localhost:7096/api/Transactions", {
+				method: "POST",
+				headers: {
+				  "Content-Type": "application/json",
+				},
+				body: JSON.stringify(transaction),
+			  });
+			})
+		  );
+		  navigate("/home?purchase=success");
+		} catch (error) {
+		  console.error("Error creating transaction:", error);
+		}
+	};
 
 	const fetchCartItems = async () => {
 		try {
@@ -107,7 +148,7 @@ function Checkout(){
 
 									<div className="float-end">
 										<button className="btn btn-light border">Cancel</button>
-										<button className="btn btn-success shadow-0 border">Confirm purchase</button>
+										<button onClick={handleConfirmPurchase} className="btn btn-success shadow-0 border">Confirm purchase</button>
 									</div>
 								</div>
 							</div>
