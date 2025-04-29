@@ -71,7 +71,7 @@ namespace Lab_E_Commerce_Website_API.Controllers
                     result = passwordHasher.VerifyHashedPassword(user, user.Password, password);
                     if (user.UserName != "" && user.UserName != null && user.Password != "" && user.Password != null && result == PasswordVerificationResult.Success)
                     {
-                        loginInfo.admin = true;
+                        loginInfo.admin = user.AdminPermission;
                         loginInfo.id = user.ID;
                         ready = true;
                         break;
