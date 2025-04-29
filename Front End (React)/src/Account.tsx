@@ -1,7 +1,68 @@
-function Account(){
+import { useEffect, useState } from "react";
+
+type User = {
+  id: number;
+  name: string;
+  email: string;
+};
+
+type AccountProps = {
+	currentUser: User | null;
+};
+
+type Transaction = {
+	id: number;
+	posterID: number;
+	productName: string;
+	productDescription: string;
+	amountPaid: number;
+	amountOfProduct: number;
+	category: string;
+	purchaserID: number;
+	dateOfPurchase: string;
+	dateOfPosting: string;
+  };  
+
+function Account({ currentUser }: AccountProps) {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const userID = currentUser!.ID;
+
+  useEffect(() => {  
+	const fetchUserInfo = async () => {
+	  try {
+		const res = await fetch(`https://localhost:7096/api/User/${userID}`);
+		const data = await res.json();
+		console.log("Fetched user data:", data);
+		setUser(data);
+	  } catch (error) {
+		console.error("Error fetching user info:", error);
+	  }
+	};
+  
+	fetchUserInfo();
+  }, [currentUser]);
+
+  useEffect(() => {
+	const fetchTransactions = async () => {
+	  try {
+		const res = await fetch(`https://localhost:7096/api/Transactions`);
+		const data: Transaction[] = await res.json();
+  
+		const userTransactions = data.filter(tx => tx.purchaserID === currentUser!.ID);
+		setTransactions(userTransactions);
+	  } catch (error) {
+		console.error("Error fetching transactions:", error);
+	  }
+	};
+  
+	fetchTransactions();
+  }, [currentUser!.ID]);
+  
+	
 	return(
 		<>
-		<div>
+			<div>
 			<br></br>
 			<br></br>
 			<div className="container py-5">
@@ -10,250 +71,58 @@ function Account(){
 				</div>
 				<br></br>
 				<div className="container">
-					<h5>Balance:</h5>
-				</div>
-				<div className="container">
-					<h5>$100</h5>
-				</div>
+          		  <h5>Name:</h5>
+          		  <p>{user?.userName || "Failed to load"}</p>
+
+				  <h5>Phone number:</h5>
+          		  <p>{user?.phoneNumber || "Failed to load"}</p>
+
+				  <h5>Address:</h5>
+          		  <p>{user?.address || "Failed to load"}</p>
+
+				  <h5>Email:</h5>
+          		  <p>{user?.email || "Failed to load"}</p>
+			
+          		  <h5>Balance:</h5>
+          		  <p>{user?.funds || 0}</p>
+          		</div>
 			</div>
 		  <div className="container">
 		    <div className="row">
-		      <div className="col-lg-4">
-		        <button
-		                className="btn btn-outline-secondary mb-3 w-100 d-lg-none"
-		                type="button"
-		                data-mdb-toggle="collapse"
-		                data-mdb-target="#navbarSupportedContent"
-		                aria-controls="navbarSupportedContent"
-		                aria-expanded="false"
-		                aria-label="Toggle navigation"
-		                >
-		          <span>Show filter</span>
-		        </button>
-		      </div>
 		      <div className="col-lg-9">
-		        <header className="d-sm-flex align-items-center border-bottom mb-4 pb-3">
-		          <strong className="d-block py-2">Listings: </strong>
-		        </header>
-
-		        <div className="row">
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <div className="d-flex flex-row">
-		                  <h5 className="mb-1 me-1">$34.50</h5>
-		                  <span className="text-danger"><s>$49.99</s></span>
-		                </div>
-		                <p className="card-text">T-shirts with multiple colors, for men and lady</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Edit</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <h5 className="card-title">$120.00</h5>
-		                <p className="card-text">Winter Jacket for Men and Women, All sizes</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Edit</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <h5 className="card-title">$120.00</h5>
-		                <p className="card-text">T-shirts with multiple colors, for men and lady</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Edit</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <h5 className="card-title">$120.00</h5>
-		                <p className="card-text">Blazer Suit Dress Jacket for Men, Blue color</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Edit</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <h5 className="card-title">$510.00</h5>
-		                <p className="card-text">Slim sleeve wallet Italian leather - multiple colors</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Edit</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <h5 className="card-title">$79.99</h5>
-		                <p className="card-text">T-shirts with multiple colors, for men and lady</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Edit</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <h5 className="card-title">$120.00</h5>
-		                <p className="card-text">Winter Jacket for Men and Women, All sizes</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Edit</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <h5 className="card-title">$120.00</h5>
-		                <p className="card-text">T-shirts with multiple colors, for men and lady</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Edit</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <h5 className="card-title">$43.50</h5>
-		                <p className="card-text">Summer New Men's Denim Jeans Shorts</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Edit</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		        </div>
 				
-				<br></br>
-				<br></br>
-				<strong className="d-block py-2">Previous Orders: </strong>
+			  <div>
+				  <h5>Purchase History</h5>
+				  {transactions.length === 0 ? (
+				    <p className="text-muted">You haven't made any purchases yet.</p>
+				  ) : (
+				    <div className="row">
+				      {transactions.map(tx => (
+				        <div className="col-md-6 col-lg-4 mb-4" key={tx.id}>
+				          <div className="card h-100 shadow-sm">
+				            <div className="card-body">
+				              <h5 className="card-title">{tx.productName}</h5>
+				              <p className="card-text">{tx.productDescription}</p>
+				              <p className="card-text"><strong>Price Paid:</strong> ${tx.amountPaid.toFixed(2)}</p>
+				              <p className="card-text"><strong>Quantity:</strong> {tx.amountOfProduct}</p>
+				              <p className="card-text"><strong>Category:</strong> {tx.category}</p>
+				              <p className="card-text">
+				                <small className="text-muted">
+				                  Purchased on: {new Date(tx.dateOfPurchase).toLocaleDateString()}
+				                </small>
+				              </p>
+				            </div>
+				          </div>
+				        </div>
+				      ))}
+				    </div>
+				  )}
+				</div>
 
-				<div className="row">
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <div className="d-flex flex-row">
-		                  <h5 className="mb-1 me-1">$34.50</h5>
-		                  <span className="text-danger"><s>$49.99</s></span>
-		                </div>
-		                <p className="card-text">T-shirts with multiple colors, for men and lady</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <h5 className="card-title">$120.00</h5>
-		                <p className="card-text">Winter Jacket for Men and Women, All sizes</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <h5 className="card-title">$120.00</h5>
-		                <p className="card-text">T-shirts with multiple colors, for men and lady</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <h5 className="card-title">$120.00</h5>
-		                <p className="card-text">Blazer Suit Dress Jacket for Men, Blue color</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <h5 className="card-title">$510.00</h5>
-		                <p className="card-text">Slim sleeve wallet Italian leather - multiple colors</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <h5 className="card-title">$79.99</h5>
-		                <p className="card-text">T-shirts with multiple colors, for men and lady</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <h5 className="card-title">$120.00</h5>
-		                <p className="card-text">Winter Jacket for Men and Women, All sizes</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <h5 className="card-title">$120.00</h5>
-		                <p className="card-text">T-shirts with multiple colors, for men and lady</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		          <div className="col-lg-4 col-md-6 col-sm-6 d-flex">
-		            <div className="card w-100 my-2 shadow-2-strong">
-		              <div className="card-body d-flex flex-column">
-		                <h5 className="card-title">$43.50</h5>
-		                <p className="card-text">Summer New Men's Denim Jeans Shorts</p>
-		                <div className="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-		                  <a href="#!" className="btn btn-primary shadow-0 me-1">Add to cart</a>
-		                </div>
-		              </div>
-		            </div>
-		          </div>
-		        </div>
-		        <hr/>
 		      </div>
 		    </div>
+			</div>
 		  </div>
-		</div>
 		</>
 	);
 }
