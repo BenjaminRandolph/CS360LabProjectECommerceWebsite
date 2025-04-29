@@ -13,6 +13,13 @@ using Microsoft.AspNetCore.Identity;
 // different things will happen (get, post, delete http requests)
 namespace Lab_E_Commerce_Website_API.Controllers
 {
+    public class LoginInfo
+    {
+        public int id { get; set; }
+
+        public bool admin {  get; set; }
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -54,7 +61,7 @@ namespace Lab_E_Commerce_Website_API.Controllers
             var userAccount = await _context.Users.Where<User>(thing => (thing.UserName == userName)).ToListAsync();
 
             bool ready = false;
-            int returnID = 0;
+            LoginInfo loginInfo = new LoginInfo();
             PasswordVerificationResult result;
 
             if (userAccount.Count > 0)
@@ -64,7 +71,8 @@ namespace Lab_E_Commerce_Website_API.Controllers
                     result = passwordHasher.VerifyHashedPassword(user, user.Password, password);
                     if (user.UserName != "" && user.UserName != null && user.Password != "" && user.Password != null && result == PasswordVerificationResult.Success)
                     {
-                        returnID = user.ID;
+                        loginInfo.admin = true;
+                        loginInfo.id = user.ID;
                         ready = true;
                         break;
                     }
@@ -73,7 +81,7 @@ namespace Lab_E_Commerce_Website_API.Controllers
 
             if (ready)
             {
-                return Ok(returnID);
+                return Ok(loginInfo);
             }
             else
             {
