@@ -7,6 +7,7 @@ import Listings from './Listings'
 import Home from './Home'
 import Checkout from './Checkout'
 import Cart from './Cart'
+import Admin from './Admin'
 import React, { useEffect, useState } from 'react';
 
 function App(){
@@ -93,6 +94,13 @@ function App(){
         						<Link to="/cart" className='nav-link'>Cart</Link>
       							</nav>
 					  		</li>
+							{/*{currentUser?.adminPermission && (*/}
+    						<li className="nav-item">
+    						    <nav>
+    						    <Link to="/admin" className="nav-link">Admin</Link>
+    						    </nav>
+    						</li>
+    						{/*})}*/}
 						</ul>
 				  	</div>
 				</div>
@@ -122,6 +130,7 @@ function App(){
 				<Route path="/home" element={<Home currentUser={currentUser}/>} />
 				<Route path="/checkout" element={<Checkout currentUser={currentUser}/>} />
 				<Route path="/cart" element={<Cart currentUser={currentUser} />} />
+				<Route path="/admin" element={<Admin currentUser={currentUser}/>} />
 
       		</Routes>
 	  </div>
