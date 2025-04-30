@@ -88,6 +88,8 @@ namespace Lab_E_Commerce_Website_API.Controllers
 
             if (matchResult.Count == 0)
             {
+                itemListing.DateOfPosting = DateTime.UtcNow;
+
                 _context.ItemListings.Add(itemListing);
                 await _context.SaveChangesAsync();
 
